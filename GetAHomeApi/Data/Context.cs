@@ -6,18 +6,19 @@ namespace GetAHomeApi.Data;
 
 public class Context : IdentityDbContext<AppUser>
 {
-    public DbSet<AppUser>? AppUsers { get; set; }
-    public DbSet<SaleStatus>? SaleStatuses { get; set; }
-    public DbSet<Tenure>? Tenures { get; set; }
-    public DbSet<ResidenceType>? ResidenceTypes { get; set; }
-    public DbSet<Address>? Adresses { get; set; }
-    public DbSet<ExpressionOfInterest>? ExpressionOfInterests { get; set; }
-    public DbSet<Image>? Images { get; set; }
-    public DbSet<Residence>? Residences { get; set; }
+    public DbSet<AppUser> AppUsers => Set<AppUser>();
+    public DbSet<SaleStatus> SaleStatuses => Set<SaleStatus>();
+    public DbSet<Tenure> Tenures => Set<Tenure>();
+    public DbSet<ResidenceType> ResidenceTypes => Set<ResidenceType>();
+    public DbSet<Address> Adresses => Set<Address>();
+    public DbSet<ExpressionOfInterest> ExpressionOfInterests => Set<ExpressionOfInterest>();
+    public DbSet<Image> Images => Set<Image>();
+    public DbSet<Residence> Residences => Set<Residence>();
 
     public Context(DbContextOptions options)
         : base(options)
     {
+     
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

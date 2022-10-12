@@ -1,5 +1,7 @@
 using GetAHomeApi.Data;
+using GetAHomeApi.Interfaces;
 using GetAHomeApi.Models;
+using GetAHomeApi.Repositories.Sqlite;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +19,8 @@ public class Program
             options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"))
         );
         builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<Context>();
+
+        builder.Services.AddScoped<IResidenceTypeRepository, ResidenceTypeRepository>();
 
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

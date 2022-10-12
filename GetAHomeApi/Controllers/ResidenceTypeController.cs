@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using GetAHomeApi.Interfaces;
+using GetAHomeApi.Models;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -7,6 +9,15 @@ namespace GetAHomeApi.Controllers;
 [ApiController]
 public class ResidenceTypeController : ControllerBase
 {
+    private readonly IResidenceTypeRepository _repo;
+
+    public ResidenceTypeController(IResidenceTypeRepository repo)
+    {
+        _repo = repo;
+    }
+
+
+
     // GET: api/<ResidenceTypeController>
     [HttpGet]
     public IEnumerable<string> Get()
@@ -23,13 +34,21 @@ public class ResidenceTypeController : ControllerBase
 
     // POST api/<ResidenceTypeController>
     [HttpPost]
-    public void Post([FromBody] string value)
+    public async Task Post()
     {
+        var grej = new ResidenceType() { Description = "Nananana" };
+        await _repo.CreateResidenceTypeAsync(grej);
+        await _repo.SaveChangesAsync();
     }
 
     // PUT api/<ResidenceTypeController>/5
     [HttpPut("{id}")]
     public void Put(int id, [FromBody] string value)
+    {
+    }
+
+    [HttpPatch("{id}")]
+    public void Patch(int id, [FromBody] string value)
     {
     }
 
