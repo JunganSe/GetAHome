@@ -29,7 +29,6 @@
 
   <ItemGroup>
     <Folder Include="Data\Seed\" />
-    <Folder Include="ViewModels\ResidenceType\" />
   </ItemGroup>
 
 </Project>

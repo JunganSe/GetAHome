@@ -26,27 +26,22 @@ public class ResidenceTypeRepository : IResidenceTypeRepository
         return await _context.ResidenceTypes.ToListAsync();
     }
 
-    public async Task<bool> CreateResidenceTypeAsync(ResidenceType residenceType)
+    public async Task CreateResidenceTypeAsync(ResidenceType residenceType)
     {
-        return await _context.ResidenceTypes.AddAsync(residenceType) != null;
-
-
+        await _context.ResidenceTypes.AddAsync(residenceType);
     }
 
-    public bool UpdateResidenceType(ResidenceType residenceType)
+    public async Task UpdateResidenceTypeAsync(ResidenceType residenceType)
     {
+        // TODO: UpdateResidenceTypeAsync
         throw new NotImplementedException();
     }
 
-    public async Task<bool> DeleteResidenceType(int id)
+    public async Task DeleteResidenceTypeAsync(int id)
     {
         var result = await _context.ResidenceTypes.FindAsync(id);
         if (result != null)
-        {
             _context.ResidenceTypes.Remove(result);
-            return true;
-        }
-        return false;
     }
 
 
@@ -55,5 +50,4 @@ public class ResidenceTypeRepository : IResidenceTypeRepository
     {
         return await _context.SaveChangesAsync() > 0;
     }
-
 }

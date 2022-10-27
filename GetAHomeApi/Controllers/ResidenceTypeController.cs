@@ -1,11 +1,12 @@
 ﻿using GetAHomeApi.Interfaces;
 using GetAHomeApi.Models;
+using GetAHomeApi.ViewModels.ResidenceType;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace GetAHomeApi.Controllers;
-[Route("api/[controller]")]
+[Route("api/ResidenceType")]
 [ApiController]
 public class ResidenceTypeController : ControllerBase
 {
@@ -18,43 +19,50 @@ public class ResidenceTypeController : ControllerBase
 
 
 
-    // GET: api/<ResidenceTypeController>
+    // GET: api/ResidenceType
     [HttpGet]
-    public IEnumerable<string> Get()
+    public async Task<ActionResult<List<ResidenceTypeViewModel>>> Get()
     {
-        return new string[] { "value1", "value2" };
+        var residenceTypes = await _repo.GetAllResidenceTypesAsync();
+        var models = new List<ResidenceTypeViewModel>(); // TODO: Mappa med automapper
+        return Ok(models); // 200
     }
 
-    // GET api/<ResidenceTypeController>/5
+    // GET api/ResidenceType/5
     [HttpGet("{id}")]
-    public string Get(int id)
+    public async Task<ActionResult<ResidenceTypeViewModel>> Get(int id)
     {
-        return "value";
+        var residencyType = await _repo.GetResidenceTypeAsync(id);
+        var model = new ResidenceTypeViewModel(); // TODO: Mappa med automapper
+        return Ok(model); // 200
     }
 
-    // POST api/<ResidenceTypeController>
+    // POST api/ResidenceType
     [HttpPost]
-    public async Task Post()
+    public async Task<ActionResult> Post(PostResidenceTypeViewModel model)
     {
-        var grej = new ResidenceType() { Description = "Nananana" };
-        await _repo.CreateResidenceTypeAsync(grej);
-        await _repo.SaveChangesAsync();
+        var residenceType = new ResidenceType() { Description = model.Description }; // TODO: Mappa med automapper
+        await _repo.CreateResidenceTypeAsync(residenceType);
+        return (await _repo.SaveChangesAsync())
+            ? StatusCode(201) // Created
+            : StatusCode(500, "Fail: Create residence type"); // Internal server error
     }
 
-    // PUT api/<ResidenceTypeController>/5
+    // PUT api/ResidenceType/5
     [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+    public async Task<ActionResult> Put(int id)
     {
+        // TODO: Update residence type
+        throw new NotImplementedException();
     }
 
-    [HttpPatch("{id}")]
-    public void Patch(int id, [FromBody] string value)
-    {
-    }
-
-    // DELETE api/<ResidenceTypeController>/5
+    // DELETE api/ResidenceType/5
     [HttpDelete("{id}")]
-    public void Delete(int id)
+    public async Task<ActionResult> Delete(int id)
     {
+        await _repo.DeleteResidenceTypeAsync(id);
+        return (await _repo.SaveChangesAsync())
+            ? StatusCode(204) // No content
+            : StatusCode(500, "Fail: Delete residence type"); // Internal server error
     }
 }

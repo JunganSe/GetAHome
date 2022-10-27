@@ -4,7 +4,7 @@ namespace GetAHomeApi.Models;
 
 public class ResidenceType
 {
-    public int Id { get; set; }
+    public int? Id { get; set; }
 
     [Required]
     public string? Description { get; set; }
