@@ -1,7 +1,9 @@
-﻿using GetAHomeApi.Interfaces;
+﻿using AutoMapper;
+using GetAHomeApi.Interfaces;
 using GetAHomeApi.Models;
 using GetAHomeApi.ViewModels.ResidenceType;
 using Microsoft.AspNetCore.Mvc;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,37 +13,41 @@ namespace GetAHomeApi.Controllers;
 public class ResidenceTypeController : ControllerBase
 {
     private readonly IResidenceTypeRepository _repo;
+    private readonly IMapper _mapper;
 
-    public ResidenceTypeController(IResidenceTypeRepository repo)
+    public ResidenceTypeController(IResidenceTypeRepository repo, IMapper mapper)
     {
         _repo = repo;
+        _mapper = mapper;
     }
 
 
-
-    // GET: api/ResidenceType
-    [HttpGet]
-    public async Task<ActionResult<List<ResidenceTypeViewModel>>> Get()
-    {
-        var residenceTypes = await _repo.GetAllResidenceTypesAsync();
-        var models = new List<ResidenceTypeViewModel>(); // TODO: Mappa med automapper
-        return Ok(models); // 200
-    }
 
     // GET api/ResidenceType/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<ResidenceTypeViewModel>> Get(int id)
+    public async Task<ActionResult<ResidenceTypeViewModel>> GetResidenceTypeById(int id)
     {
-        var residencyType = await _repo.GetResidenceTypeAsync(id);
-        var model = new ResidenceTypeViewModel(); // TODO: Mappa med automapper
+        var residenceType = await _repo.GetResidenceTypeAsync(id);
+        if (residenceType == null)
+            return NotFound(); // 404
+        var model = _mapper.Map<ResidenceTypeViewModel>(residenceType);
         return Ok(model); // 200
+    }
+
+    // GET: api/ResidenceType
+    [HttpGet]
+    public async Task<ActionResult<List<ResidenceTypeViewModel>>> GetAllResidenceTypes()
+    {
+        var residenceTypes = await _repo.GetAllResidenceTypesAsync();
+        var models = _mapper.Map<List<ResidenceTypeViewModel>>(residenceTypes);
+        return Ok(models); // 200
     }
 
     // POST api/ResidenceType
     [HttpPost]
-    public async Task<ActionResult> Post(PostResidenceTypeViewModel model)
+    public async Task<ActionResult> CreateResidenceType(PostResidenceTypeViewModel model)
     {
-        var residenceType = new ResidenceType() { Description = model.Description }; // TODO: Mappa med automapper
+        var residenceType = _mapper.Map<ResidenceType>(model);
         await _repo.CreateResidenceTypeAsync(residenceType);
         return (await _repo.SaveChangesAsync())
             ? StatusCode(201) // Created
@@ -50,19 +56,25 @@ public class ResidenceTypeController : ControllerBase
 
     // PUT api/ResidenceType/5
     [HttpPut("{id}")]
-    public async Task<ActionResult> Put(int id)
+    public async Task<ActionResult> UpdateResidenceType(int id, UpdateResidenceTypeViewModel model)
     {
-        // TODO: Update residence type
-        throw new NotImplementedException();
+        var residenceType = await _repo.GetResidenceTypeAsync(id);
+        if (residenceType == null)
+            return NotFound(); // 404
+        _mapper.Map(model, residenceType);
+        _repo.UpdateResidenceTypeAsync(residenceType);
+        return (await _repo.SaveChangesAsync())
+            ? Ok("Updated") // 200
+            : StatusCode(500, "Fail: Update residence type"); // Internal server error
     }
 
     // DELETE api/ResidenceType/5
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(int id)
+    public async Task<ActionResult> DeleteResidenceType(int id)
     {
         await _repo.DeleteResidenceTypeAsync(id);
         return (await _repo.SaveChangesAsync())
-            ? StatusCode(204) // No content
+            ? Ok("Deleted") // 200
             : StatusCode(500, "Fail: Delete residence type"); // Internal server error
     }
 }

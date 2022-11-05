@@ -8,6 +8,6 @@ public interface IResidenceTypeRepository
     public Task<List<ResidenceType>> GetAllResidenceTypesAsync();
     public Task CreateResidenceTypeAsync(ResidenceType residenceType);
     public Task DeleteResidenceTypeAsync(int id);
-    public Task UpdateResidenceTypeAsync(ResidenceType residenceType);
+    public void UpdateResidenceTypeAsync(ResidenceType residenceType);
     public Task<bool> SaveChangesAsync();
 }

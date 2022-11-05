@@ -1,6 +1,6 @@
 ﻿namespace GetAHomeApi.ViewModels.ResidenceType;
 
-public class PostResidenceTypeViewModel
+public class UpdateResidenceTypeViewModel
 {
     public string? Name { get; set; }
 }

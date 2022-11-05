@@ -1,4 +1,5 @@
 using GetAHomeApi.Data;
+using GetAHomeApi.Helpers;
 using GetAHomeApi.Interfaces;
 using GetAHomeApi.Models;
 using GetAHomeApi.Repositories.Sqlite;
@@ -19,7 +20,7 @@ public class Program
             options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"))
         );
         builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<Context>();
-
+        builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
         builder.Services.AddScoped<IResidenceTypeRepository, ResidenceTypeRepository>();
 
         builder.Services.AddControllers();

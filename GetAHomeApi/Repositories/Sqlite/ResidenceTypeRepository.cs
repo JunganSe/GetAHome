@@ -31,10 +31,9 @@ public class ResidenceTypeRepository : IResidenceTypeRepository
         await _context.ResidenceTypes.AddAsync(residenceType);
     }
 
-    public async Task UpdateResidenceTypeAsync(ResidenceType residenceType)
+    public void UpdateResidenceTypeAsync(ResidenceType residenceType)
     {
-        // TODO: UpdateResidenceTypeAsync
-        throw new NotImplementedException();
+        _context.ResidenceTypes.Update(residenceType);
     }
 
     public async Task DeleteResidenceTypeAsync(int id)
